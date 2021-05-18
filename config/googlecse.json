@@ -1,0 +1,6 @@
+{
+  "apikey": "default // Your google developer API key",
+  "instagram": "default // Instagram google CSE",
+  "twitter": "default // Twitter google CSE",
+  "facebook": "default // Facebook google CSE"
+}
