@@ -1,2 +1,4 @@
-# PyRCON
-Menu based python recon tool
+# PyRCON  
+A menu based recon tool made in Python  
+
+## __Features__  
