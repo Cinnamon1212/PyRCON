@@ -70,8 +70,8 @@ Guide (CSE Set up):
 4) Repeat with "https://twitter.com/" and "https://en-gb.facebook.com/public/*"
 ```
 ## References
-* (DecimScanner)[https://github.com/Cinnamon1212/DecimScanner]
-* (ImgKit)[https://pypi.org/project/imgkit/]
-* (ExifTool)[https://exiftool.org/]
-* (PyExifTool)[https://github.com/smarnach/pyexiftool]
-* (wkhtmltopdf)[https://wkhtmltopdf.org/]
+* [DecimScanner](https://github.com/Cinnamon1212/DecimScanner)
+* [ImgKit](https://pypi.org/project/imgkit/)
+* [ExifTool](https://exiftool.org/)
+* [PyExifTool](https://github.com/smarnach/pyexiftool)
+* [wkhtmltopdf](https://wkhtmltopdf.org/)
