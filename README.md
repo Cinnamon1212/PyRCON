@@ -75,3 +75,5 @@ Guide (CSE Set up):
 * [ExifTool](https://exiftool.org/)
 * [PyExifTool](https://github.com/smarnach/pyexiftool)
 * [wkhtmltopdf](https://wkhtmltopdf.org/)
+* [Google CSE](https://cse.google.com/)
+* [Google developer console](https://console.cloud.google.com/)
