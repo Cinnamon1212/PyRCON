@@ -19,7 +19,7 @@ A menu based recon tool made in Python
 * Status check
 * Web crawl
 * Sub domain
-*
+
 ### Bluetooth
 * Get nearby
 * Service scan
