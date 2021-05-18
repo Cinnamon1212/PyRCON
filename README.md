@@ -37,7 +37,7 @@ A menu based recon tool made in Python
 
 ### Pip requirements
 Note: you may need to install these as root (to use them while running PyRCON)
-```bash
+```
 pip install DecimScanner
 pip install imgkit
 git clone https://github.com/smarnach/pyexiftool
@@ -46,7 +46,7 @@ python3 setup.py install
 ```
 
 ### Apt requirements
-```bash
+```
 sudo apt-get install exiftool
 sudo apt-get install wkhtmltopdf
 ```
@@ -69,4 +69,9 @@ Guide (CSE Set up):
 3) Copy the CSE ID and place it into the /config/googlecse.json file
 4) Repeat with "https://twitter.com/" and "https://en-gb.facebook.com/public/*"
 ```
-
+## References
+* (DecimScanner)[https://github.com/Cinnamon1212/DecimScanner]
+* (ImgKit)[https://pypi.org/project/imgkit/]
+* (ExifTool)[https://exiftool.org/]
+* (PyExifTool)[https://github.com/smarnach/pyexiftool]
+* (wkhtmltopdf)[https://wkhtmltopdf.org/]
