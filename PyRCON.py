@@ -4,6 +4,8 @@ import sys
 import requests
 import socket
 import json
+import exiftool
+import imgkit
 from DecimScanner import *
 
 def cls():
@@ -713,7 +715,7 @@ would you like to remove it from the target list? Note that keeping the target m
             print("(1) Instagram search")
             print("(2) Facebook search")
             print("(3) Twitter search")
-            print("(4) Email lookup")
+            print("(4) Website screenshot")
             print("(5) Exif")
             print("(<) Back")
             menu_choice = input("Please enter an option from the menu: ")
@@ -728,53 +730,35 @@ would you like to remove it from the target list? Note that keeping the target m
             return
 
         if menu_choice not in ["4", "5"]:
+            cls()
             if os.path.exists("./config/googlecse.json"):
                 with open("./config/googlecse.json", "r") as f:
                     data = json.load(f)
                     apikey = data['apikey']
             else:
                 while True:
-                    continue_ = input("""Unable to access the google cse config file.
+                    input("""Unable to access the google cse config file.
                     Please ensure this isn't deleted and values are not default.
-                    Would you like to continue anyways? (y/N): """)
-                    if continue_.lower().strip() in ["", "yes", "no", "y", "n"]:
-                        break
-                    else:
-                        print("Invalid choice, please use y or n")
-                        time.sleep(2)
-                        cls()
-                if continue_.lower().strip() in ["", "no", "n"]:
+                    Press enter to return""")
                     return
-                else:
-                    data = None
-            if data is not None:
-                q = input("Please enter the name or account you'd like to search for: ")
-                if menu_choice == "1":
-                    cx = data['instagram']
-                elif menu_choice == "2":
-                    cx = data['facebook']
-                elif menu_choice == "3":
-                    cx = data['twitter']
+            q = input("Please enter the name or account you'd like to search for: ")
+            if menu_choice == "1":
+                cx = data['instagram']
+            elif menu_choice == "2":
+                cx = data['facebook']
+            elif menu_choice == "3":
+                cx = data['twitter']
 
-                if "default" in cx:
-                    while True:
-                        continue_ = input("""Google CSE has not been configured.
-                        Would you like to continue anyways? (y/N): """)
-                        if continue_.lower().strip() in ["", "yes", "no", "y", "n"]:
-                            cls()
-                            break
-                        else:
-                            print("Invalid choice, please use y or n")
-                            time.sleep(2)
-                            cls()
-                    if continue_.lower().strip() in ["", "no", "n"]:
-                        return
+            if "default" in cx:
+                input("""Google CSE has not been configured.
+                Press enter to retrun""")
+                return
 
 
-                url = f"https://www.googleapis.com/customsearch/v1?key={apikey}&cx={cx}&q={q}&start=1"
-                response = requests.get(url)
-                resp_data = response.json()
-
+            url = f"https://www.googleapis.com/customsearch/v1?key={apikey}&cx={cx}&q={q}&start=1"
+            response = requests.get(url)
+            resp_data = response.json()
+            try:
                 if len(resp_data['items']) <= 20:
                     for item in resp_data['items']:
                         print(f"+ {item['link']}")
@@ -790,13 +774,140 @@ would you like to remove it from the target list? Note that keeping the target m
                             return
                         cls()
                         x += 1
+            except KeyError:
+                input("No search results. Press enter to return")
 
 
+        elif menu_choice == "4":
+            while True:
+                print("(1) Grab from website")
+                print("(2) Load HTML from file")
+                print("(<) Back")
+                menu_choice = input("Please enter an option from the menu: ")
+                if menu_choice in ["1", "2", "<"]:
+                    break
+                else:
+                    print("Invalid menu choice, please use the number or symbol")
+                    time.sleep(2)
+                    cls()
+
+            if menu_choice == "<":
+                return
 
 
+            elif menu_choice == "1":
+                url = input("Please enter the URL of the website: ")
+                if url.strip() != "":
+                    pass
+                else:
+                    print("URL was not provided, returning")
+                    time.sleep(2)
+                    return
 
+                while True:
+                    out_path = input("Please enter the output directory (Enter for CWD): ")
+                    if out_path.strip() == "":
+                        out_path = "./"
+                        break
+                    else:
+                        if os.path.exists(out_path):
+                            break
+                        else:
+                            print("Unable to locate file path")
+                            time.sleep(2)
+                            cls()
 
+                userAgent = input("Enter a user agent (Enter for default): ")
+                if userAgent.strip() == "":
+                    userAgent = "Mozilla/5.0 (X11; Linux i686; rv:5.0) Gecko/20141013 Firefox/37.0"
 
+                options = {
+                    'quiet': '',
+                    'custom-header': [('User-Agent', userAgent)]
+                }
+                filename = f"{time.time()}.jpg"
+                imgkit.from_url(url, filename, options=options)
+                input(f"Image written to {filename}, press enter to return")
+                return
+
+            elif menu_choice == "2":
+                while True:
+                    file = input("Enter the HTML file: ")
+                    if os.path.exists(file):
+                        break
+                    else:
+                        print("Unable to find file")
+                        time.sleep(2)
+                        cls()
+
+                while True:
+                    css_files = input("Enter the CSS file(s) you'd like to use (Enter for none): ")
+                    if css_files.strip() == "":
+                        css_files = None
+                        break
+                    else:
+                        css_files = css_files.split(",")
+                        for file in css_files:
+                            if not os.path.exists(file):
+                                input(f"Unable to access {file}, press enter to return")
+                                return
+                        break
+
+                filename = f"{time.time()}.jpg"
+                if css_files is None:
+                    imgkit.from_file(file, filename, css=css_files)
+                else:
+                    imgkit.from_file(file, filename)
+
+                input(f"Image written to {filename}, press enter to return")
+                return
+
+        elif menu_choice == "5":
+            cls()
+            files = input("Enter the file(s) you'd like to use (seperated by commas): ")
+            if files.strip() == "":
+                print("No files were provided, returning")
+                return
+            else:
+                final_files = []
+                if "," in files:
+                    files = files.split(",")
+                    for file in files:
+                        if not os.path.exists(file):
+                            while True:
+                                check = input(f"Invalid file: {file}, would you like to remove it (y/N)?")
+                                if check.lower().strip() in ["", "n", "no"]:
+                                    final_files.append(file)
+                                    break
+                                elif check in ["y", "yes"]:
+                                    break
+                                else:
+                                    print("Invalid menu choice, please use y or n")
+                                    time.sleep(2)
+                                    cls()
+                        else:
+                            final_files.append(file)
+                else:
+                    if not os.path.exists(files):
+                        print("Unable to find file, returning")
+                        time.sleep(3)
+                        return
+                    else:
+                        final_files = files
+
+            with exiftool.ExifTool() as et:
+                metadata = et.get_metadata_batch(final_files)
+
+            x = 1
+            for data in metadata:
+                for key in data.keys():
+                    y = key.split(":")
+                    if len(y) == 2:
+                        print(f"({y[0]}) {y[1]}: {data[key]}")
+                    else:
+                        print(f"{y[0]}: {data[key]}")
+                input(f"Press enter to continue ({x}/{len(metadata)})")
+                x += 1
 
 
 def main():
