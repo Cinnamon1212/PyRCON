@@ -38,7 +38,7 @@ A menu based recon tool made in Python
 ### Pip requirements
 Note: you may need to install these as root (to use them while running PyRCON)
 ```
-pip install DecimScanner
+pip install DecimScanner==1.4.3
 pip install imgkit
 git clone https://github.com/smarnach/pyexiftool
 cd pyexiftool
