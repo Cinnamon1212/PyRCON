@@ -55,7 +55,7 @@ sudo apt-get install wkhtmltopdf
 
 You will need to create a few google CSE search engines and place them in the /config/googlecse.json file
 ```
-Guide (google developer console
+Guide (google developer console)
 1) Head to https://console.cloud.google.com/
 2) Create a new project and name it
 3) Head to the credidentials section and copy your API key
